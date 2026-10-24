@@ -1,0 +1,53 @@
+version: 2
+
+seeds:
+  - name: raw_customers
+    description: Customer extract from the storefront database.
+    config:
+      column_types:
+        customer_id: integer
+        first_name: varchar
+        last_name: varchar
+        email: varchar
+        signup_date: date
+        country: varchar
+
+  - name: raw_products
+    description: Product catalogue.
+    config:
+      column_types:
+        product_id: integer
+        product_name: varchar
+        category: varchar
+        unit_price: decimal(10, 2)
+        unit_cost: decimal(10, 2)
+
+  - name: raw_orders
+    description: Order extract. An order appears more than once when its status changed between loads.
+    config:
+      column_types:
+        order_id: integer
+        customer_id: integer
+        order_date: timestamp
+        status: varchar
+        _loaded_at: timestamp
+
+  - name: raw_order_items
+    description: Order lines, with the unit price at the time of purchase.
+    config:
+      column_types:
+        order_item_id: integer
+        order_id: integer
+        product_id: integer
+        quantity: integer
+        unit_price: decimal(10, 2)
+
+  - name: raw_payments
+    description: Payment attempts from the payment provider, amounts in cents.
+    config:
+      column_types:
+        payment_id: integer
+        order_id: integer
+        payment_method: varchar
+        amount_cents: integer
+        status: varchar
