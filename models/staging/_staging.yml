@@ -11,7 +11,8 @@ models:
       - name: country_code
         data_tests:
           - accepted_values:
-              values: ["US", "GB", "DE", "IN", "AE", "CA", "FR", "AU"]
+              arguments:
+                values: ["US", "GB", "DE", "IN", "AE", "CA", "FR", "AU"]
 
   - name: stg_products
     description: Product catalogue with unit margin.
@@ -30,12 +31,14 @@ models:
         data_tests:
           - not_null
           - relationships:
-              to: ref('stg_customers')
-              field: customer_id
+              arguments:
+                to: ref('stg_customers')
+                field: customer_id
       - name: status
         data_tests:
           - accepted_values:
-              values: ["placed", "shipped", "completed", "returned", "cancelled"]
+              arguments:
+                values: ["placed", "shipped", "completed", "returned", "cancelled"]
 
   - name: stg_order_items
     description: Order lines.
@@ -45,13 +48,15 @@ models:
       - name: order_id
         data_tests:
           - relationships:
-              to: ref('stg_orders')
-              field: order_id
+              arguments:
+                to: ref('stg_orders')
+                field: order_id
       - name: product_id
         data_tests:
           - relationships:
-              to: ref('stg_products')
-              field: product_id
+              arguments:
+                to: ref('stg_products')
+                field: product_id
       - name: quantity
         data_tests: [is_positive]
 
@@ -63,15 +68,18 @@ models:
       - name: order_id
         data_tests:
           - relationships:
-              to: ref('stg_orders')
-              field: order_id
+              arguments:
+                to: ref('stg_orders')
+                field: order_id
       - name: amount
         data_tests: [is_positive]
       - name: payment_method
         data_tests:
           - accepted_values:
-              values: ["credit_card", "debit_card", "paypal", "bank_transfer", "gift_card"]
+              arguments:
+                values: ["credit_card", "debit_card", "paypal", "bank_transfer", "gift_card"]
       - name: payment_status
         data_tests:
           - accepted_values:
-              values: ["success", "failed"]
+              arguments:
+                values: ["success", "failed"]

@@ -9,8 +9,9 @@ models:
       - name: customer_id
         data_tests:
           - relationships:
-              to: ref('dim_customers')
-              field: customer_id
+              arguments:
+                to: ref('dim_customers')
+                field: customer_id
       - name: item_count
         data_tests: [is_positive]
       - name: is_revenue_order
@@ -26,7 +27,8 @@ models:
         data_tests:
           - not_null
           - accepted_values:
-              values: ["prospect", "new", "loyal", "champion", "at_risk"]
+              arguments:
+                values: ["prospect", "new", "loyal", "champion", "at_risk"]
 
   - name: dim_products
     description: Product catalogue with sales performance and rankings.
