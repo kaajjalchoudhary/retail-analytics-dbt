@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  dbt-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Lint Python
+        run: ruff check scripts
+
+      - name: Generate seed data
+        run: python scripts/generate_seeds.py
+
+      - name: dbt build (seeds, models, tests)
+        run: dbt build --profiles-dir .
+
+      - name: Incremental run
+        run: dbt build --profiles-dir . --select fct_daily_revenue
+
+      - name: Headline numbers
+        run: python scripts/query_marts.py
+
+      - name: Generate docs
+        run: dbt docs generate --profiles-dir .
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dbt-docs
+          path: |
+            target/index.html
+            target/manifest.json
+            target/catalog.json
