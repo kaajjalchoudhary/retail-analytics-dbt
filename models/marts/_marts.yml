@@ -1,0 +1,43 @@
+version: 2
+
+models:
+  - name: fct_orders
+    description: One row per order with totals, margin and payment details.
+    columns:
+      - name: order_id
+        data_tests: [unique, not_null]
+      - name: customer_id
+        data_tests:
+          - relationships:
+              to: ref('dim_customers')
+              field: customer_id
+      - name: item_count
+        data_tests: [is_positive]
+      - name: is_revenue_order
+        description: True for completed and shipped orders; returned, cancelled and unpaid orders are excluded from revenue.
+
+  - name: dim_customers
+    description: One row per customer with lifetime metrics and an RFM-style segment.
+    columns:
+      - name: customer_id
+        data_tests: [unique, not_null]
+      - name: customer_segment
+        description: prospect, new, loyal, champion (8+ orders, active in the last 60 days) or at_risk (inactive 180+ days).
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: ["prospect", "new", "loyal", "champion", "at_risk"]
+
+  - name: dim_products
+    description: Product catalogue with sales performance and rankings.
+    columns:
+      - name: product_id
+        data_tests: [unique, not_null]
+
+  - name: fct_daily_revenue
+    description: Daily revenue from completed and shipped orders (incremental model).
+    columns:
+      - name: order_date
+        data_tests: [unique, not_null]
+      - name: revenue
+        data_tests: [is_positive]
