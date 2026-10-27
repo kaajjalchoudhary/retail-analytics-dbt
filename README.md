@@ -151,3 +151,7 @@ group by 1;
   order so analysts can still study returns.
 - **Reproducible recency**: customer recency is measured against the latest order in the data, not
   `current_date`, so segments don't drift over time.
+
+## License
+
+MIT, see [LICENSE](LICENSE).
